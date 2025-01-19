@@ -29,8 +29,9 @@ public class PrivateMessageCommand {
     public static final String receiverArgumentName = "receiver";
     public static final String messageArgumentName = "message";
 
-    public static BrigadierCommand createBrigadierCommand(final ProxyServer proxy, final ChannelManager channelManager,
-                                                          final Logger logger, final PrivateMessageCommandFeedback privateMessageCommandFeedback) {
+    public static BrigadierCommand createBrigadierCommand(final ProxyServer proxy,
+                                                          final ChannelManager channelManager,
+                                                          final PrivateMessageCommandFeedback privateMessageCommandFeedback) {
         final LiteralCommandNode<CommandSource> messageNode = LiteralArgumentBuilder.<CommandSource>literal(commandName)
                 .executes(context -> {
                     context.getSource().sendMessage(privateMessageCommandFeedback.getMissingReceiverArgumentComponent());

@@ -1,14 +1,24 @@
 package dev.atlasmc.hermes.model.config;
 
+import dev.atlasmc.hermes.constant.FileConstants;
 import dev.atlasmc.hermes.constant.MiniMessageCustomTagConstants;
 import dev.atlasmc.hermes.model.config.messageConfig.MessageConfig;
 import lombok.Data;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.kyori.adventure.text.minimessage.tag.resolver.Placeholder;
+import org.slf4j.Logger;
+import org.spongepowered.configurate.CommentedConfigurationNode;
+import org.spongepowered.configurate.ConfigurateException;
+import org.spongepowered.configurate.ConfigurationOptions;
+import org.spongepowered.configurate.hocon.HoconConfigurationLoader;
+import org.spongepowered.configurate.loader.HeaderMode;
 import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 import org.spongepowered.configurate.objectmapping.meta.Comment;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -106,6 +116,102 @@ public class HermesConfig {
 
     public HermesConfig() {
         this.setDefaults();
+    }
+
+    /**
+     * Tries to read the config file and creates the file/directory if it does not exist yet.
+     * @param configFolder the path to read the config file from.
+     * @return the config that was read or created. Returns null if an error occurred in the process.
+     */
+    public static HermesConfig getConfig(final Path configFolder, final Logger logger) {
+        final File configFile = new File(configFolder.toString(), FileConstants.hermesConfigFileName);
+        //create a new config file if none was found
+        if(!configFile.exists()){
+            logger.warn("No config found for Hermes. Creating a new config file in the path: \"{}\".", configFile.getAbsolutePath());
+            return createConfigFile(configFile, logger);
+        }
+        //read the existing config file
+        return deserializeConfig(configFile, logger);
+    }
+
+    /**
+     * Deserializes a config file to a {@link HermesConfig} object.
+     * @param configFile the file to deserialize.
+     * @return the deserialized object or null if an error occurred.
+     */
+    private static HermesConfig deserializeConfig(final File configFile, final Logger logger) {
+        final Path path = Path.of(configFile.getAbsolutePath());
+        final HoconConfigurationLoader loader = HoconConfigurationLoader.builder()
+                .path(path)
+                .build();
+        try{
+            final CommentedConfigurationNode node = loader.load();
+            return node.get(HermesConfig.class);
+        } catch (ConfigurateException e) {
+            logger.error("Something went wrong while reading the config file at: \"{}\".\ndetails:\n{}", configFile.getAbsolutePath(), e.toString());
+            return null;
+        }
+    }
+
+    /**
+     * Creates a new config file with the default configuration.
+     * @param file the file to write to. Creates a new file/directory if it does not exist yet.
+     * @return The config object that was written to the file or null if the creation wasn't successful.
+     */
+    private static HermesConfig createConfigFile(final File file, final Logger logger) {
+        //create file
+        try {
+            if (!file.getParentFile().exists() && !file.getParentFile().mkdir()) {
+                logger.error("could not create config directory");
+                return null;
+            }
+            if (!file.createNewFile()) {
+                logger.error("could not create config file");
+                return null;
+            }
+        } catch (IOException e) {
+            logger.error("error while creating config file");
+            return null;
+        }
+
+        //create and serialize config
+        final HermesConfig config = new HermesConfig();
+        if(!HermesConfig.serializeConfig(file, config, logger))
+            return null;
+        return config;
+    }
+
+    /**
+     * Serializes the given config and writes it to the given file.
+     * @param file the file to write the config to.
+     * @param config the config to write to the file.
+     * @return whether the action was successful.
+     */
+    private static boolean serializeConfig(final File file, final HermesConfig config, final Logger logger) {
+        final Path path = Path.of(file.getAbsolutePath());
+        //set serialization options
+        final ConfigurationOptions configurationOptions = ConfigurationOptions
+                .defaults()
+                .header("===========================================================\n" +
+                        "This is an automatically generated config file.\n" +
+                        "Generated for config version \"" + HermesConfig.configurationVersion + "\"\n" +
+                        "===========================================================");
+        final HoconConfigurationLoader loader = HoconConfigurationLoader.builder()
+                .path(path)
+                .prettyPrinting(true)
+                .headerMode(HeaderMode.PRESERVE)
+                .defaultOptions(configurationOptions)
+                .build();
+        //serialize
+        try {
+            final CommentedConfigurationNode node = loader.load();
+            node.set(HermesConfig.class, config);
+            loader.save(node);
+            return true;
+        } catch (ConfigurateException e) {
+            logger.warn("Something went wrong while trying to serialize the config to the config file...\ndetails:\n{}", e.getMessage());
+            return false;
+        }
     }
 
     /**

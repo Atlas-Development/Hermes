@@ -26,7 +26,8 @@ public class PrivateMessageReplyCommand {
     public static final String commandName = "reply";
     public static final String messageArgumentName = "message";
 
-    public static BrigadierCommand createBrigadierCommand(final ProxyServer proxy, final Logger logger, final PrivateMessageReplyCommandFeedback privateMessageReplyCommandFeedback,
+    public static BrigadierCommand createBrigadierCommand(final ProxyServer proxy,
+                                                          final PrivateMessageReplyCommandFeedback privateMessageReplyCommandFeedback,
                                                           final ChannelManager channelManager) {
         final LiteralCommandNode<CommandSource> replyNode = LiteralArgumentBuilder.<CommandSource>literal(commandName)
                 .executes(context -> {
