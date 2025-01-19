@@ -10,7 +10,8 @@ import dev.atlasmc.hermes.constant.PermissionConstants;
 import dev.atlasmc.hermes.helper.AudienceHelper;
 import dev.atlasmc.hermes.model.channel.ChannelManager;
 import dev.atlasmc.hermes.model.config.HermesConfig;
-import dev.atlasmc.hermes.model.config.MessageFormats;
+import dev.atlasmc.hermes.model.config.messageConfig.EventFeedback;
+import dev.atlasmc.hermes.model.config.messageConfig.MiscellaneousMessages;
 import dev.atlasmc.hermes.model.config.runtime.PlayerConfiguration;
 import lombok.Getter;
 import net.kyori.adventure.audience.Audience;
@@ -57,6 +58,8 @@ public class PlayerJoinedListener {
         final Player player = event.getPlayer();
         final Optional<RegisteredServer> previousServer = event.getPreviousServer();
         final RegisteredServer currentServer = event.getServer();
+        final MiscellaneousMessages miscellaneousMessages = configuration.getMessageConfig().getMiscellaneousMessages();
+
         //try to find an existing playerConfiguration for the joined player and create one if none was found
         //player configuration must be gotten by uuid because the audience changed
         PlayerConfiguration playerConfiguration = null;
@@ -66,7 +69,7 @@ public class PlayerJoinedListener {
             playerConfiguration = currentPlayerConfig;
         }
         if (playerConfiguration == null) {
-            playerConfiguration = new PlayerConfiguration(player, luckPerms, proxy, configuration.getMessageFormats());
+            playerConfiguration = new PlayerConfiguration(player, luckPerms, proxy, miscellaneousMessages);
             playerConfigurations.put(player, playerConfiguration);
         } else {
             //re-assign playerConfiguration to the new audience
@@ -90,7 +93,7 @@ public class PlayerJoinedListener {
 
     /**
      * Sends a player join message to {@link ChannelManager#getServerGlobalChannel()}.<br/>
-     * Uses the format specified in {@link MessageFormats#getPlayerJoinedServerMessageFormat()}.
+     * Uses the format specified in {@link EventFeedback#getPlayerJoinedServer()}.
      *
      * @param server the server that the player joined to.
      * @param player the player that joined.
@@ -101,6 +104,7 @@ public class PlayerJoinedListener {
         final Component serverPrefix = configuration.getServerPrefixComponent(serverName);
         final Optional<Collection<Component>> senderLpGroupsPrefix = AudienceHelper.getAudienceLpGroupPrefix(player, playerConfigurations);
         final Optional<Component> senderLpPrimaryGroupPrefix = AudienceHelper.getAudienceLpPrimaryGroupPrefix(player, playerConfigurations);
+        final EventFeedback eventFeedback = configuration.getMessageConfig().getEventFeedback();
 
         //define custom tag replacements
         final TagResolver[] customTagResolvers = new TagResolver[]{
@@ -112,13 +116,13 @@ public class PlayerJoinedListener {
                 Formatter.booleanChoice(MiniMessageCustomTagConstants.senderHasLpGroupPrefix, senderLpGroupsPrefix.isPresent())
         };
 
-        final Component playerJoinedMessageComponent = miniMessage.deserialize(configuration.getMessageFormats().getPlayerJoinedServerMessageFormat(), customTagResolvers);
+        final Component playerJoinedMessageComponent = miniMessage.deserialize(eventFeedback.getPlayerJoinedServer(), customTagResolvers);
         this.channelManager.getServerGlobalChannel().sendMessage(playerJoinedMessageComponent);
     }
 
     /**
      * Sends a player change server message to {@link ChannelManager#getServerGlobalChannel()}.<br/>
-     * Uses the format specified in {@link MessageFormats#getPlayerSwitchedServerMessageFormat()}.
+     * Uses the format specified in {@link EventFeedback#getPlayerSwitchedServer()}.
      *
      * @param previousServer the server that the player switched from.
      * @param currentServer  the server that the player switched to.
@@ -133,6 +137,7 @@ public class PlayerJoinedListener {
         final Component currentServerPrefix = configuration.getServerPrefixComponent(currentServerName);
         final Optional<Collection<Component>> senderLpGroupsPrefix = AudienceHelper.getAudienceLpGroupPrefix(player, playerConfigurations);
         final Optional<Component> senderLpPrimaryGroupPrefix = AudienceHelper.getAudienceLpPrimaryGroupPrefix(player, playerConfigurations);
+        final EventFeedback eventFeedback = configuration.getMessageConfig().getEventFeedback();
 
         //define custom tag replacements
         final TagResolver[] customTagResolvers = new TagResolver[]{
@@ -146,7 +151,7 @@ public class PlayerJoinedListener {
                 Formatter.booleanChoice(MiniMessageCustomTagConstants.senderHasLpGroupPrefix, senderLpGroupsPrefix.isPresent())
         };
 
-        final Component playerJoinedMessageComponent = miniMessage.deserialize(configuration.getMessageFormats().getPlayerSwitchedServerMessageFormat(), customTagResolvers);
+        final Component playerJoinedMessageComponent = miniMessage.deserialize(eventFeedback.getPlayerSwitchedServer(), customTagResolvers);
         this.channelManager.getServerGlobalChannel().sendMessage(playerJoinedMessageComponent);
     }
 }

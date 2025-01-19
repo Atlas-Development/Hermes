@@ -4,7 +4,7 @@ import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import dev.atlasmc.hermes.constant.ChannelConstants;
 import dev.atlasmc.hermes.helper.LuckPermsHelper;
-import dev.atlasmc.hermes.model.config.MessageFormats;
+import dev.atlasmc.hermes.model.config.messageConfig.MiscellaneousMessages;
 import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.audience.Audience;
@@ -24,7 +24,7 @@ public class PlayerConfiguration extends ChannelConfiguration {
     private final Component primaryGroupPrefix;
 
     @Getter
-    private final MessageFormats messageFormats;
+    private final MiscellaneousMessages miscellaneous;
 
     @Getter
     @Setter
@@ -47,9 +47,9 @@ public class PlayerConfiguration extends ChannelConfiguration {
     }
 
     public PlayerConfiguration(final Player player, final LuckPerms luckPerms, final ProxyServer proxy,
-                               final MessageFormats messageFormats) {
+                               final MiscellaneousMessages miscellaneous) {
         this.playerUUID = player.getUniqueId();
-        this.messageFormats = messageFormats;
+        this.miscellaneous = miscellaneous;
         this.proxy = proxy;
         this.luckPerms = luckPerms;
         setCurrentAudience(player);
@@ -67,7 +67,7 @@ public class PlayerConfiguration extends ChannelConfiguration {
 
     public Collection<Component> updateLpUserPrefixes(final ProxyServer proxyServer, final LuckPerms luckPerms) {
         final Optional<Player> player = proxyServer.getPlayer(getPlayerUUID());
-        return player.map(value -> LuckPermsHelper.GetGroupPrefixes(luckPerms, value, messageFormats))
+        return player.map(value -> LuckPermsHelper.GetGroupPrefixes(luckPerms, value, miscellaneous))
                 .orElseGet(() -> new ArrayList<>(List.of(Component.text("?"))));
     }
 
@@ -75,6 +75,6 @@ public class PlayerConfiguration extends ChannelConfiguration {
         final Optional<Player> player = proxyServer.getPlayer(getPlayerUUID());
         if (player.isEmpty())
             return Component.text("?");
-        return LuckPermsHelper.getPrimaryGroupPrefix(luckPerms, player.get(), messageFormats);
+        return LuckPermsHelper.getPrimaryGroupPrefix(luckPerms, player.get(), miscellaneous);
     }
 }

@@ -12,7 +12,7 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import dev.atlasmc.hermes.constant.PermissionConstants;
 import dev.atlasmc.hermes.model.channel.Channel;
 import dev.atlasmc.hermes.model.channel.ChannelManager;
-import dev.atlasmc.hermes.model.config.CommandFeedbackMessages;
+import dev.atlasmc.hermes.model.config.messageConfig.commandFeedback.PrivateMessageReplyCommandFeedback;
 import net.kyori.adventure.text.Component;
 import org.slf4j.Logger;
 
@@ -25,11 +25,11 @@ public class PrivateMessageReplyCommand {
     public static final String commandName = "reply";
     public static final String messageArgumentName = "message";
 
-    public static BrigadierCommand createBrigadierCommand(final ProxyServer proxy, final Logger logger, final CommandFeedbackMessages commandFeedbackMessages,
+    public static BrigadierCommand createBrigadierCommand(final ProxyServer proxy, final Logger logger, final PrivateMessageReplyCommandFeedback privateMessageReplyCommandFeedback,
                                                           final ChannelManager channelManager) {
         final LiteralCommandNode<CommandSource> replyNode = LiteralArgumentBuilder.<CommandSource>literal(commandName)
                 .executes(context -> {
-                    context.getSource().sendMessage(commandFeedbackMessages.getPrivateMessageReplyMissingMessageArgumentComponent());
+                    context.getSource().sendMessage(privateMessageReplyCommandFeedback.getMissingMessageArgumentComponent());
                     return Command.SINGLE_SUCCESS;
                 })
                 .then(RequiredArgumentBuilder.<CommandSource, String>argument(messageArgumentName, StringArgumentType.greedyString())
@@ -37,18 +37,18 @@ public class PrivateMessageReplyCommand {
                             final String messageArgument = context.getArgument(messageArgumentName, String.class);
                             //check permission
                             if (context.getSource() instanceof Player && !context.getSource().hasPermission(PermissionConstants.commandPermissionPrivateMessageReply)) {
-                                context.getSource().sendMessage(commandFeedbackMessages.getPrivateMessageReplyMissingPermissionComponent());
+                                context.getSource().sendMessage(privateMessageReplyCommandFeedback.getMissingPermissionComponent());
                                 return Command.SINGLE_SUCCESS;
                             }
 
                             final Channel privateMessageChannel = channelManager.getPrivateMessageChannel(context.getSource());
                             if (privateMessageChannel == null)
-                                context.getSource().sendMessage(commandFeedbackMessages.getPrivateMessageReplyNoPartnerComponent());
+                                context.getSource().sendMessage(privateMessageReplyCommandFeedback.getNoPartnerComponent());
                             else if (!privateMessageChannel.isReceiverAvailable(proxy)) {
                                 if (privateMessageChannel.isReceiverOffline(proxy))
-                                    context.getSource().sendMessage(commandFeedbackMessages.getPrivateMessageReplyOfflineRecipientPlayerMessageComponent());
+                                    context.getSource().sendMessage(privateMessageReplyCommandFeedback.getRecipientPlayerOfflineMessageComponent());
                                 else
-                                    context.getSource().sendMessage(commandFeedbackMessages.getPrivateMessageReplyUnavailableRecipientMessageComponent());
+                                    context.getSource().sendMessage(privateMessageReplyCommandFeedback.getRecipientUnavailableMessageComponent());
                             } else
                                 privateMessageChannel.sendMessage(Component.text(messageArgument));
                             return Command.SINGLE_SUCCESS;
