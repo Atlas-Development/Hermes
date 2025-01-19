@@ -14,6 +14,7 @@ import dev.atlasmc.hermes.model.channel.Channel;
 import dev.atlasmc.hermes.model.channel.ChannelManager;
 import dev.atlasmc.hermes.model.config.messageConfig.commandFeedback.PrivateMessageReplyCommandFeedback;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.slf4j.Logger;
 
 /**
@@ -35,22 +36,31 @@ public class PrivateMessageReplyCommand {
                 .then(RequiredArgumentBuilder.<CommandSource, String>argument(messageArgumentName, StringArgumentType.greedyString())
                         .executes(context -> {
                             final String messageArgument = context.getArgument(messageArgumentName, String.class);
-                            //check permission
-                            if (context.getSource() instanceof Player && !context.getSource().hasPermission(PermissionConstants.commandPermissionPrivateMessageReply)) {
-                                context.getSource().sendMessage(privateMessageReplyCommandFeedback.getMissingPermissionComponent());
-                                return Command.SINGLE_SUCCESS;
+                            final Component messageComponent;
+
+                            if(context.getSource() instanceof Player) {
+                                //permission checks
+                                if (context.getSource() instanceof Player && !context.getSource().hasPermission(PermissionConstants.commandPermissionPrivateMessageReply)) {
+                                    context.getSource().sendMessage(privateMessageReplyCommandFeedback.getMissingPermissionComponent());
+                                    return Command.SINGLE_SUCCESS;
+                                }
+                                messageComponent = context.getSource().hasPermission(PermissionConstants.formatLegacyChatCodesPrivateMessage) ?
+                                        LegacyComponentSerializer.legacyAmpersand().deserialize(messageArgument) : Component.text(messageArgument);
+                            } else {
+                                messageComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(messageArgument);
                             }
 
                             final Channel privateMessageChannel = channelManager.getPrivateMessageChannel(context.getSource());
-                            if (privateMessageChannel == null)
+                            if (privateMessageChannel == null) {
                                 context.getSource().sendMessage(privateMessageReplyCommandFeedback.getNoPartnerComponent());
-                            else if (!privateMessageChannel.isReceiverAvailable(proxy)) {
+                            } else if (!privateMessageChannel.isReceiverAvailable(proxy)) {
                                 if (privateMessageChannel.isReceiverOffline(proxy))
                                     context.getSource().sendMessage(privateMessageReplyCommandFeedback.getRecipientPlayerOfflineMessageComponent());
                                 else
                                     context.getSource().sendMessage(privateMessageReplyCommandFeedback.getRecipientUnavailableMessageComponent());
-                            } else
-                                privateMessageChannel.sendMessage(Component.text(messageArgument));
+                            } else {
+                                privateMessageChannel.sendMessage(messageComponent);
+                            }
                             return Command.SINGLE_SUCCESS;
                         }))
                 .build();

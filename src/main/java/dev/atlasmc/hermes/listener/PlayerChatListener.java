@@ -132,12 +132,37 @@ public class PlayerChatListener {
             logger.error("tried to send message in non existent server!");
             return;
         }
-        final Component messageComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(message);
         final MiniMessage miniMessage = MiniMessage.miniMessage();
         final Optional<Collection<Component>> senderLpGroupsPrefix = AudienceHelper.getAudienceLpGroupPrefix(sender, playerConfigurations);
         final Optional<Component> senderLpPrimaryGroupPrefix = AudienceHelper.getAudienceLpPrimaryGroupPrefix(sender, playerConfigurations);
         final Component serverPrefix = configuration.getServerPrefixComponent(serverName);
         final MessageFormats messageFormats = configuration.getMessageConfig().getMessageFormats();
+        final Component messageComponent;
+
+        final Channel targetChannel;
+        final String miniMessageString;
+
+        if (globalChat) {
+            //check permissions
+            if (!sender.hasPermission(PermissionConstants.chatSendServerGlobalMessage))
+                return;
+            messageComponent = sender.hasPermission(PermissionConstants.formatLegacyChatCodesServerGlobal) ?
+                    LegacyComponentSerializer.legacyAmpersand().deserialize(message) : Component.text(message);
+
+            //use global channel
+            miniMessageString = messageFormats.getPlayerServerGlobalChat();
+            targetChannel = channelManager.getServerGlobalChannel();
+        } else {
+            //check permissions
+            if (!sender.hasPermission(PermissionConstants.getChatSendServerMessage(serverName)))
+                return;
+            messageComponent = sender.hasPermission(PermissionConstants.formatLegacyChatCodesServer) ?
+                    LegacyComponentSerializer.legacyAmpersand().deserialize(message) : Component.text(message);
+
+            //use server channel
+            miniMessageString = messageFormats.getPlayerServerChat();
+            targetChannel = channelManager.getServerChannel(serverName);
+        }
 
         //define custom tag replacements
         final TagResolver[] customTagResolvers = new TagResolver[]{
@@ -149,24 +174,6 @@ public class PlayerChatListener {
                 Formatter.joining(MiniMessageCustomTagConstants.senderLpGroupsPrefix, senderLpGroupsPrefix.orElse(new ArrayList<>())),
                 Formatter.booleanChoice(MiniMessageCustomTagConstants.senderHasLpGroupPrefix, senderLpGroupsPrefix.isPresent())
         };
-
-        final Channel targetChannel;
-        final String miniMessageString;
-        if (globalChat) {
-            //check permission
-            if (!sender.hasPermission(PermissionConstants.chatSendServerGlobalMessage))
-                return;
-            //use global channel
-            miniMessageString = messageFormats.getPlayerServerGlobalChat();
-            targetChannel = channelManager.getServerGlobalChannel();
-        } else {
-            //check permission
-            if (!sender.hasPermission(PermissionConstants.getChatSendServerMessage(serverName)))
-                return;
-            //use server channel
-            miniMessageString = messageFormats.getPlayerServerChat();
-            targetChannel = channelManager.getServerChannel(serverName);
-        }
 
         final Component chatMiniMessageComponent = miniMessage.deserialize(miniMessageString, customTagResolvers);
         targetChannel.sendMessage(chatMiniMessageComponent);
