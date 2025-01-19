@@ -14,6 +14,7 @@ import dev.atlasmc.hermes.model.channel.ChannelManager;
 import dev.atlasmc.hermes.model.channel.PrivateMessageChannel;
 import dev.atlasmc.hermes.model.config.messageConfig.commandFeedback.PrivateMessageCommandFeedback;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.slf4j.Logger;
 
 import java.util.*;
@@ -59,14 +60,22 @@ public class PrivateMessageCommand {
                         })
                         .then(RequiredArgumentBuilder.<CommandSource, String>argument(messageArgumentName, StringArgumentType.greedyString())
                                 .executes(context -> {
-                                    //permission check
-                                    if (context.getSource() instanceof Player && !context.getSource().hasPermission(PermissionConstants.commandPermissionPrivateMessageInitiate)) {
-                                        context.getSource().sendMessage(privateMessageCommandFeedback.getMissingPermissionComponent());
-                                        return Command.SINGLE_SUCCESS;
-                                    }
-
                                     final String messageArgument = context.getArgument(messageArgumentName, String.class);
                                     final String receiverArgument = context.getArgument(receiverArgumentName, String.class);
+
+                                    final Component messageComponent;
+
+                                    if (context.getSource() instanceof Player) {
+                                        //permission checks
+                                        if (!context.getSource().hasPermission(PermissionConstants.commandPermissionPrivateMessageInitiate)) {
+                                            context.getSource().sendMessage(privateMessageCommandFeedback.getMissingPermissionComponent());
+                                            return Command.SINGLE_SUCCESS;
+                                        }
+                                        messageComponent = context.getSource().hasPermission(PermissionConstants.formatLegacyChatCodesPrivateMessage) ?
+                                                LegacyComponentSerializer.legacyAmpersand().deserialize(messageArgument) : Component.text(messageArgument);
+                                    } else {
+                                        messageComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(messageArgument);
+                                    }
 
                                     final Optional<Player> receiver = proxy.getPlayer(receiverArgument);
                                     if (receiver.isEmpty()) {
@@ -74,7 +83,8 @@ public class PrivateMessageCommand {
                                         return Command.SINGLE_SUCCESS;
                                     }
                                     PrivateMessageChannel privateMessageChannel = channelManager.setPrivateMessageChannel(context.getSource(), receiver.get());
-                                    privateMessageChannel.sendMessage(Component.text(messageArgument));
+
+                                    privateMessageChannel.sendMessage(messageComponent);
                                     return Command.SINGLE_SUCCESS;
                                 })
                         )

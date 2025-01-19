@@ -74,4 +74,29 @@ public interface PermissionConstants {
      * Permission for setting whether the player should cause a server switch message.
      */
     String playerSwitchServerMessage = "hermes.serverchange.change";
+
+
+    /// ===================================================================
+    /// Permissions for chat message formatting.
+    /// For all message formatting options in all types of chat messages, use "hermes.chat.message.format.*".
+    /**
+     * Permission for setting whether MiniMessage legacy chat-codes in a player's private messages or private reply messages should be applied.<br/>
+     * Legacy chat-codes are in the form of [ampersand][format-char][text].<br/>
+     * For more info, see <a href="https://docs.advntr.dev/serializer/legacy.html">MiniMessage legacy serializer</a>.
+     */
+    String formatLegacyChatCodesPrivateMessage = "hermes.chat.message.format.private.legacy";
+
+    /**
+     * Permission for setting whether MiniMessage legacy chat-codes in a player's server messages should be applied.<br/>
+     * Legacy chat-codes are in the form of [ampersand][format-char][text].<br/>
+     * For more info, see <a href="https://docs.advntr.dev/serializer/legacy.html">MiniMessage legacy serializer</a>.
+     */
+    String formatLegacyChatCodesServer = "hermes.chat.message.format.server.legacy";
+
+    /**
+     * Permission for setting whether MiniMessage legacy chat-codes in a player's global server messages should be applied.<br/>
+     * Legacy chat-codes are in the form of [ampersand][format-char][text].<br/>
+     * For more info, see <a href="https://docs.advntr.dev/serializer/legacy.html">MiniMessage legacy serializer</a>.
+     */
+    String formatLegacyChatCodesServerGlobal = "hermes.chat.message.format.serverglobal.legacy";
 }
