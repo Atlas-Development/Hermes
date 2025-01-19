@@ -11,7 +11,8 @@ import dev.atlasmc.hermes.helper.AudienceHelper;
 import dev.atlasmc.hermes.model.channel.Channel;
 import dev.atlasmc.hermes.model.channel.ChannelManager;
 import dev.atlasmc.hermes.model.config.HermesConfig;
-import dev.atlasmc.hermes.model.config.MessageFormats;
+import dev.atlasmc.hermes.model.config.messageConfig.MessageFormats;
+import dev.atlasmc.hermes.model.config.messageConfig.MiscellaneousMessages;
 import dev.atlasmc.hermes.model.config.runtime.PlayerConfiguration;
 import lombok.Getter;
 import net.kyori.adventure.audience.Audience;
@@ -78,6 +79,7 @@ public class PlayerChatListener {
         final Collection<Component> groupPrefixes = playerConfiguration.getLpGroupPrefixes();
         final Component primaryGroupPrefix = playerConfiguration.getPrimaryGroupPrefix();
         final boolean useGlobalChat;
+        final MiscellaneousMessages miscellaneousMessages = configuration.getMessageConfig().getMiscellaneousMessages();
 
         if (message.charAt(0) == '!') {
             if (message.length() == 1) {
@@ -85,10 +87,10 @@ public class PlayerChatListener {
                 //toggle between global and server chat
                 if (playerConfiguration.isServerGlobalChannelSender()) {
                     playerConfiguration.setServerGlobalChannelSender(false);
-                    player.sendMessage(miniMessage.deserialize(configuration.getCommandFeedbackMessages().getSwitchedToServerChatMessage()));
+                    player.sendMessage(miniMessage.deserialize(miscellaneousMessages.getSwitchedToServerChatMessage()));
                 } else {
                     playerConfiguration.setServerGlobalChannelSender(true);
-                    player.sendMessage(miniMessage.deserialize(configuration.getCommandFeedbackMessages().getSwitchedToGlobalChatMessage()));
+                    player.sendMessage(miniMessage.deserialize(miscellaneousMessages.getSwitchedToGlobalChatMessage()));
                 }
                 return;
             }
@@ -104,9 +106,8 @@ public class PlayerChatListener {
     }
 
     /**
-     * sends a given message and replaces custom minimessage tags.
-     * {@link MessageFormats#getPrivateMessageSenderFormat()}
-     * replaces the following tags
+     * Sends a given message and replaces custom minimessage tags.
+     * Replaces the following tags
      * <ul>
      *     <li>{@value MiniMessageCustomTagConstants#serverPrefix}</li>
      *     <li>{@value MiniMessageCustomTagConstants#sender}</li>
@@ -136,6 +137,7 @@ public class PlayerChatListener {
         final Optional<Collection<Component>> senderLpGroupsPrefix = AudienceHelper.getAudienceLpGroupPrefix(sender, playerConfigurations);
         final Optional<Component> senderLpPrimaryGroupPrefix = AudienceHelper.getAudienceLpPrimaryGroupPrefix(sender, playerConfigurations);
         final Component serverPrefix = configuration.getServerPrefixComponent(serverName);
+        final MessageFormats messageFormats = configuration.getMessageConfig().getMessageFormats();
 
         //define custom tag replacements
         final TagResolver[] customTagResolvers = new TagResolver[]{
@@ -155,14 +157,14 @@ public class PlayerChatListener {
             if (!sender.hasPermission(PermissionConstants.chatSendServerGlobalMessage))
                 return;
             //use global channel
-            miniMessageString = configuration.getMessageFormats().getPlayerServerGlobalChatMessageFormat();
+            miniMessageString = messageFormats.getPlayerServerGlobalChat();
             targetChannel = channelManager.getServerGlobalChannel();
         } else {
             //check permission
             if (!sender.hasPermission(PermissionConstants.getChatSendServerMessage(serverName)))
                 return;
             //use server channel
-            miniMessageString = configuration.getMessageFormats().getPlayerServerChatMessageFormat();
+            miniMessageString = messageFormats.getPlayerServerChat();
             targetChannel = channelManager.getServerChannel(serverName);
         }
 

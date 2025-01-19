@@ -5,7 +5,7 @@ import com.velocitypowered.api.proxy.Player;
 import dev.atlasmc.hermes.constant.MiniMessageCustomTagConstants;
 import dev.atlasmc.hermes.helper.AudienceHelper;
 import dev.atlasmc.hermes.model.config.HermesConfig;
-import dev.atlasmc.hermes.model.config.MessageFormats;
+import dev.atlasmc.hermes.model.config.messageConfig.MessageFormats;
 import dev.atlasmc.hermes.model.config.runtime.PlayerConfiguration;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
@@ -59,15 +59,15 @@ public class PrivateMessageChannel extends Channel {
      *     </tr>
      *     <tr>
      *         <td>{@link #senderAudience}</td>
-     *         <td>{@link MessageFormats#getPrivateMessageSenderFormat()}</td>
+     *         <td>{@link MessageFormats#getPrivateMessageSender()}</td>
      *     </tr>
      *     <tr>
      *         <td>{@link Channel#getReceiverAudience()}</td>
-     *         <td>{@link MessageFormats#getPrivateMessageReceiverFormat()}</td>
+     *         <td>{@link MessageFormats#getPrivateMessageReceiver()}</td>
      *     </tr>
      *     <tr>
      *         <td>{@link PrivateMessageChannel#getReceiverAudience()}</td>
-     *         <td>{@link MessageFormats#getPrivateMessageThirdPartyFormat()}</td>
+     *         <td>{@link MessageFormats#getPrivateMessageThirdParty()}</td>
      *     </tr>
      * </table>
      *
@@ -104,13 +104,13 @@ public class PrivateMessageChannel extends Channel {
         };
 
         //send message to sender and receiver
-        final Component senderMiniMessageComponent = miniMessage.deserialize(configuration.getMessageFormats().getPrivateMessageSenderFormat(), customTagResolver);
+        final Component senderMiniMessageComponent = miniMessage.deserialize(configuration.getMessageConfig().getMessageFormats().getPrivateMessageSender(), customTagResolver);
         AudienceHelper.sendMessageToAudienceSafe(senderAudience, senderMiniMessageComponent);
-        final Component receiverMiniMessageComponent = miniMessage.deserialize(configuration.getMessageFormats().getPrivateMessageReceiverFormat(), customTagResolver);
+        final Component receiverMiniMessageComponent = miniMessage.deserialize(configuration.getMessageConfig().getMessageFormats().getPrivateMessageReceiver(), customTagResolver);
         AudienceHelper.sendMessageToAudienceSafe(receiverAudience, receiverMiniMessageComponent);
 
         //Send message to global Channel
-        final Component privateMessageGlobalMiniMessageComponent = miniMessage.deserialize(configuration.getMessageFormats().getPrivateMessageThirdPartyFormat(), customTagResolver);
+        final Component privateMessageGlobalMiniMessageComponent = miniMessage.deserialize(configuration.getMessageConfig().getMessageFormats().getPrivateMessageThirdParty(), customTagResolver);
         final Audience excludedAudience = Audience.audience(senderAudience, receiverAudience);
         AudienceHelper.sendMessageToAudienceSafe(privateMessageGlobalChannel.getReceiverAudience(), privateMessageGlobalMiniMessageComponent, excludedAudience);
         return true;

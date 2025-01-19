@@ -12,7 +12,7 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import dev.atlasmc.hermes.constant.PermissionConstants;
 import dev.atlasmc.hermes.model.channel.ChannelManager;
 import dev.atlasmc.hermes.model.channel.PrivateMessageChannel;
-import dev.atlasmc.hermes.model.config.CommandFeedbackMessages;
+import dev.atlasmc.hermes.model.config.messageConfig.commandFeedback.PrivateMessageCommandFeedback;
 import net.kyori.adventure.text.Component;
 import org.slf4j.Logger;
 
@@ -29,10 +29,10 @@ public class PrivateMessageCommand {
     public static final String messageArgumentName = "message";
 
     public static BrigadierCommand createBrigadierCommand(final ProxyServer proxy, final ChannelManager channelManager,
-                                                          final Logger logger, final CommandFeedbackMessages commandFeedbackMessages) {
+                                                          final Logger logger, final PrivateMessageCommandFeedback privateMessageCommandFeedback) {
         final LiteralCommandNode<CommandSource> messageNode = LiteralArgumentBuilder.<CommandSource>literal(commandName)
                 .executes(context -> {
-                    context.getSource().sendMessage(commandFeedbackMessages.getPrivateMessageMissingReceiverArgumentComponent());
+                    context.getSource().sendMessage(privateMessageCommandFeedback.getMissingReceiverArgumentComponent());
                     return Command.SINGLE_SUCCESS;
                 })
                 .then(RequiredArgumentBuilder.<CommandSource, String>argument(receiverArgumentName, StringArgumentType.word())
@@ -54,14 +54,14 @@ public class PrivateMessageCommand {
                             return builder.buildFuture();
                         })
                         .executes(context -> {
-                            context.getSource().sendMessage(commandFeedbackMessages.getPrivateMessageMissingMessageArgumentComponent());
+                            context.getSource().sendMessage(privateMessageCommandFeedback.getMissingMessageArgumentComponent());
                             return Command.SINGLE_SUCCESS;
                         })
                         .then(RequiredArgumentBuilder.<CommandSource, String>argument(messageArgumentName, StringArgumentType.greedyString())
                                 .executes(context -> {
                                     //permission check
                                     if (context.getSource() instanceof Player && !context.getSource().hasPermission(PermissionConstants.commandPermissionPrivateMessageInitiate)) {
-                                        context.getSource().sendMessage(commandFeedbackMessages.getPrivateMessageMissingPermissionComponent());
+                                        context.getSource().sendMessage(privateMessageCommandFeedback.getMissingPermissionComponent());
                                         return Command.SINGLE_SUCCESS;
                                     }
 
@@ -70,7 +70,7 @@ public class PrivateMessageCommand {
 
                                     final Optional<Player> receiver = proxy.getPlayer(receiverArgument);
                                     if (receiver.isEmpty()) {
-                                        context.getSource().sendMessage(commandFeedbackMessages.getPrivateMessageUnavailableRecipientMessageComponent());
+                                        context.getSource().sendMessage(privateMessageCommandFeedback.getRecipientUnavailableMessageComponent());
                                         return Command.SINGLE_SUCCESS;
                                     }
                                     PrivateMessageChannel privateMessageChannel = channelManager.setPrivateMessageChannel(context.getSource(), receiver.get());

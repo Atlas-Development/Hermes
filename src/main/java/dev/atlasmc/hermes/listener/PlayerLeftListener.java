@@ -9,7 +9,7 @@ import dev.atlasmc.hermes.constant.PermissionConstants;
 import dev.atlasmc.hermes.helper.AudienceHelper;
 import dev.atlasmc.hermes.model.channel.ChannelManager;
 import dev.atlasmc.hermes.model.config.HermesConfig;
-import dev.atlasmc.hermes.model.config.MessageFormats;
+import dev.atlasmc.hermes.model.config.messageConfig.EventFeedback;
 import dev.atlasmc.hermes.model.config.runtime.PlayerConfiguration;
 import lombok.Getter;
 import net.kyori.adventure.audience.Audience;
@@ -55,7 +55,7 @@ public class PlayerLeftListener {
 
     /**
      * Sends a player leave message to {@link ChannelManager#getServerGlobalChannel()}.<br/>
-     * Uses the format specified in {@link MessageFormats#getPlayerLeftServerMessageFormat()}.
+     * Uses the format specified in {@link EventFeedback#getPlayerLeftServer()}.
      *
      * @param serverName the name of the server the player was on.
      * @param player     the player that left.
@@ -76,7 +76,7 @@ public class PlayerLeftListener {
                 Formatter.booleanChoice(MiniMessageCustomTagConstants.senderHasLpGroupPrefix, senderLpGroupsPrefix.isPresent())
         };
 
-        final Component playerJoinedMessageComponent = miniMessage.deserialize(configuration.getMessageFormats().getPlayerLeftServerMessageFormat(), customTagResolvers);
+        final Component playerJoinedMessageComponent = miniMessage.deserialize(configuration.getMessageConfig().getEventFeedback().getPlayerLeftServer(), customTagResolvers);
         this.channelManager.getServerGlobalChannel().sendMessage(playerJoinedMessageComponent);
     }
 }
