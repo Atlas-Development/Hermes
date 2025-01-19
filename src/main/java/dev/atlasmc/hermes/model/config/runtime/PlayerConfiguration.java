@@ -18,10 +18,10 @@ public class PlayerConfiguration extends ChannelConfiguration {
     private UUID playerUUID;
 
     @Getter
-    private final Collection<Component> lpGroupPrefixes;
+    private Collection<Component> lpGroupPrefixes;
 
     @Getter
-    private final Component primaryGroupPrefix;
+    private Component primaryGroupPrefix;
 
     @Getter
     private final MiscellaneousMessages miscellaneous;
@@ -43,38 +43,28 @@ public class PlayerConfiguration extends ChannelConfiguration {
     @Override
     public void setCurrentAudience(Audience audience) {
         super.setCurrentAudience(audience);
-        playerUUID = ((Player) audience).getUniqueId();
+        this.playerUUID = ((Player) audience).getUniqueId();
     }
 
     public PlayerConfiguration(final Player player, final LuckPerms luckPerms, final ProxyServer proxy,
-                               final MiscellaneousMessages miscellaneous) {
+                               final MiscellaneousMessages miscellaneousMessages) {
         this.playerUUID = player.getUniqueId();
-        this.miscellaneous = miscellaneous;
+        this.miscellaneous = miscellaneousMessages;
         this.proxy = proxy;
         this.luckPerms = luckPerms;
-        setCurrentAudience(player);
-        lpGroupPrefixes = updateLpUserPrefixes(proxy, luckPerms);
-        primaryGroupPrefix = updateLpUserPrimaryGroupPrefix(proxy, luckPerms);
-        privateMessageChannelReceiverUUID = Optional.empty();
-        addReceivingNamedChannelName(ChannelConstants.ServerGlobalChannelName);
-        isServerGlobalChannelSender = false;
+        this.setCurrentAudience(player);
+        this.lpGroupPrefixes = LuckPermsHelper.GetGroupPrefixes(luckPerms, player, miscellaneousMessages);
+        this.primaryGroupPrefix = LuckPermsHelper.getPrimaryGroupPrefix(luckPerms, player, miscellaneousMessages);
+        this.privateMessageChannelReceiverUUID = Optional.empty();
+        this.addReceivingNamedChannelName(ChannelConstants.ServerGlobalChannelName);
+        this.isServerGlobalChannelSender = false;
     }
 
     public void updateLpData() {
-        updateLpUserPrefixes(proxy, luckPerms);
-        updateLpUserPrimaryGroupPrefix(proxy, luckPerms);
-    }
-
-    public Collection<Component> updateLpUserPrefixes(final ProxyServer proxyServer, final LuckPerms luckPerms) {
-        final Optional<Player> player = proxyServer.getPlayer(getPlayerUUID());
-        return player.map(value -> LuckPermsHelper.GetGroupPrefixes(luckPerms, value, miscellaneous))
-                .orElseGet(() -> new ArrayList<>(List.of(Component.text("?"))));
-    }
-
-    public Component updateLpUserPrimaryGroupPrefix(final ProxyServer proxyServer, final LuckPerms luckPerms) {
-        final Optional<Player> player = proxyServer.getPlayer(getPlayerUUID());
-        if (player.isEmpty())
-            return Component.text("?");
-        return LuckPermsHelper.getPrimaryGroupPrefix(luckPerms, player.get(), miscellaneous);
+        final Optional<Player> player = this.proxy.getPlayer(getPlayerUUID());
+        if(player.isEmpty())
+            return;
+        this.lpGroupPrefixes = LuckPermsHelper.GetGroupPrefixes(luckPerms, player.get(), miscellaneous);
+        this.primaryGroupPrefix = LuckPermsHelper.getPrimaryGroupPrefix(luckPerms, player.get(), miscellaneous);
     }
 }

@@ -8,7 +8,7 @@ import net.luckperms.api.model.user.User;
 import java.util.Map;
 
 public class LuckPermsUserDataRecalculateListener {
-    public static void onLuckPermsUserDataRecalculate(UserDataRecalculateEvent event, Map<Audience, PlayerConfiguration> playerConfigurations) {
+    public static void onLuckPermsUserDataRecalculate(final UserDataRecalculateEvent event, final Map<Audience, PlayerConfiguration> playerConfigurations) {
         final User user = event.getUser();
         for (PlayerConfiguration playerConfiguration : playerConfigurations.values()) {
             if (playerConfiguration.getPlayerUUID() != user.getUniqueId())
