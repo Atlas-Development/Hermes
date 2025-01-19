@@ -22,7 +22,8 @@ public class SocialSpyCommand {
     public static final String commandName = "socialspy";
     public static final String stateArgumentName = "state";
 
-    public static BrigadierCommand createBrigadierCommand(final ChannelManager channelManager, final SocialSpyCommandFeedback socialSpyCommandFeedback) {
+    public static BrigadierCommand createBrigadierCommand(final ChannelManager channelManager,
+                                                          final SocialSpyCommandFeedback socialSpyCommandFeedback) {
         final LiteralCommandNode<CommandSource> socialSpyNode = LiteralArgumentBuilder.<CommandSource>literal(commandName)
                 .executes(context -> {
                     context.getSource().sendMessage(socialSpyCommandFeedback.getMissingStateArgumentComponent());
