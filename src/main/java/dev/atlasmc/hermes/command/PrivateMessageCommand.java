@@ -42,10 +42,11 @@ public class PrivateMessageCommand {
                             final Collection<Player> allPlayers = proxy.getAllPlayers();
 
                             //try to find players with matching username start
+                            String receiverArgumentValue = ctx.getArgument(receiverArgumentName, String.class).toLowerCase();
                             try {
                                 for (final Player player : allPlayers) {
                                     final String playerName = player.getUsername();
-                                    if (playerName.startsWith(ctx.getArgument(receiverArgumentName, String.class)))
+                                    if (playerName.toLowerCase().startsWith(receiverArgumentValue))
                                         builder.suggest(playerName);
                                 }
                             } catch (final IllegalArgumentException e) {
