@@ -15,7 +15,6 @@ import dev.atlasmc.hermes.model.channel.PrivateMessageChannel;
 import dev.atlasmc.hermes.model.config.messageConfig.commandFeedback.PrivateMessageCommandFeedback;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import org.slf4j.Logger;
 
 import java.util.*;
 
@@ -42,8 +41,8 @@ public class PrivateMessageCommand {
                             final Collection<Player> allPlayers = proxy.getAllPlayers();
 
                             //try to find players with matching username start
-                            String receiverArgumentValue = ctx.getArgument(receiverArgumentName, String.class).toLowerCase();
                             try {
+                                String receiverArgumentValue = ctx.getArgument(receiverArgumentName, String.class).toLowerCase();
                                 for (final Player player : allPlayers) {
                                     final String playerName = player.getUsername();
                                     if (playerName.toLowerCase().startsWith(receiverArgumentValue))
