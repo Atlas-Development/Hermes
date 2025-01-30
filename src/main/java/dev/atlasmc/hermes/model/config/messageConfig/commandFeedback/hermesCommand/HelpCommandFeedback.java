@@ -47,7 +47,7 @@ public class HelpCommandFeedback extends CommandFeedbackItem {
      */
     @Comment("Feedback messages for the \"/" + HermesCommand.commandName + " " + HermesCommand.hermesSubCommandTypeHelp + "\" command.")
     private String helpCommandMessage = MessageFormat.format("""
-            <gray>Hermes is a chat plugin for velocity.
+            <dark_gray>[<dark_aqua>hermes<dark_gray>] <gray>Hermes is a chat plugin for velocity.
             supported commands are:<white>
             {0}
             {1}

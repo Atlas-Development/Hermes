@@ -28,7 +28,7 @@ public class HermesCommandFeedback extends CommandFeedbackItem {
         return deserializeWithUsageTag(missingTypeArgument, usagePlaceholderStatic);
     }
 
-    private String missingTypeArgument = "<gray>No argument specified for <dark_gray>\\<type><gray><br>usage: <dark_gray><usage>";
+    private String missingTypeArgument = "<dark_gray>[<dark_aqua>hermes<dark_gray>] <gray>No argument specified for <dark_gray>\\<type><gray><br>usage: <dark_gray><usage>";
 
     private HelpCommandFeedback helpCommandFeedback = new HelpCommandFeedback();
 }

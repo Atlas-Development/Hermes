@@ -14,12 +14,12 @@ public class MiscellaneousMessages {
     /**
      * MiniMessage to be sent when switching from server to global chat
      */
-    private String switchedToGlobalChatMessage = "<gray>Switched to global chat.";
+    private String switchedToGlobalChatMessage = "<dark_gray>[<dark_aqua>hermes<dark_gray>] <gray>Switched to global chat.";
 
     /**
      * MiniMessage to be sent when switching from server to global chat
      */
-    private String switchedToServerChatMessage = "<gray>Switched to server chat.";
+    private String switchedToServerChatMessage = "<dark_gray>[<dark_aqua>hermes<dark_gray>] <gray>Switched to server chat.";
 
     /**
      * MiniMessage to be used in place of the elements in the custom tag {@value MiniMessageCustomTagConstants#senderLpGroupsPrefix} and {@value MiniMessageCustomTagConstants#receiverLpGroupsPrefix}.<br/>
