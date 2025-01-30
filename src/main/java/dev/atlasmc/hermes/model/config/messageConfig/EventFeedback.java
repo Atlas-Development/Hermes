@@ -25,7 +25,7 @@ public class EventFeedback {
     @Comment("""
             Message to send when a player joins the server.
             """)
-    private String playerJoinedServer = MessageFormat.format("<green>+ <dark_gray>[<{3}:''|''><dark_gray>] [<gray><hover:show_text:''<{2}>''><{1}></hover><dark_gray>] <gray><{0}>",
+    private String playerJoinedServer = MessageFormat.format("<green>+ <dark_gray>[<gray><hover:show_text:''<{2}>''><{1}></hover><dark_gray>] [<{3}:''''><dark_gray>] <gray><{0}>",
             MiniMessageCustomTagConstants.player,
             MiniMessageCustomTagConstants.currentServerPrefix,
             MiniMessageCustomTagConstants.currentServerName,
@@ -46,7 +46,7 @@ public class EventFeedback {
     @Comment("""
             Message to send when a player leaves the server.
             """)
-    private String playerLeftServer = MessageFormat.format("<red>- <dark_gray>[<{3}:''|''><dark_gray>] [<gray><hover:show_text:''<{2}>''><{1}></hover><dark_gray>] <gray><{0}>",
+    private String playerLeftServer = MessageFormat.format("<red>- <dark_gray>[<gray><hover:show_text:''<{2}>''><{1}></hover><dark_gray>] [<{3}:''''><dark_gray>] <gray><{0}>",
             MiniMessageCustomTagConstants.player,
             MiniMessageCustomTagConstants.currentServerPrefix,
             MiniMessageCustomTagConstants.currentServerName,
@@ -69,10 +69,11 @@ public class EventFeedback {
     @Comment("""
             Message to send when a player switches servers.
             """)
-    private String playerSwitchedServer = MessageFormat.format("<gray>-> <{0}> switched from <hover:show_text:''<{2}>''><{1}></hover> to <hover:show_text:''<{4}>''><{3}></hover>",
+    private String playerSwitchedServer = MessageFormat.format("<dark_gray>[<{5}><dark_gray>] <gray><{0}> <dark_gray>[<hover:show_text:''<{4}>''><{3}></hover><dark_gray>] <gray>→ <dark_gray>[<hover:show_text:''<{2}>''><{1}></hover><dark_gray>]",
             MiniMessageCustomTagConstants.player,
             MiniMessageCustomTagConstants.currentServerPrefix,
             MiniMessageCustomTagConstants.currentServerName,
             MiniMessageCustomTagConstants.previousServerPrefix,
-            MiniMessageCustomTagConstants.previousServerName);
+            MiniMessageCustomTagConstants.previousServerName,
+            MiniMessageCustomTagConstants.senderLpGroupsPrefix);
 }

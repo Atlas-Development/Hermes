@@ -30,7 +30,7 @@ public class PrivateMessageCommandFeedback extends CommandFeedbackItem {
         return deserializeWithUsageTag(missingReceiverArgument, usagePlaceholderStatic);
     }
 
-    private final String missingReceiverArgument = "<gray>No argument specified for <dark_gray>\\<receiver><gray><br>usage: <dark_gray><usage>";
+    private final String missingReceiverArgument = "<dark_gray>[<dark_aqua>hermes<dark_gray>] <gray>No argument specified for <dark_gray>\\<receiver><gray><br>usage: <dark_gray><usage>";
 
     /**
      * MiniMessage feedback for command /{@value PrivateMessageCommand#commandName} missing parameter {@value PrivateMessageCommand#messageArgumentName}.
@@ -39,7 +39,7 @@ public class PrivateMessageCommandFeedback extends CommandFeedbackItem {
         return deserializeWithUsageTag(missingMessageArgument, usagePlaceholderStatic);
     }
 
-    private final String missingMessageArgument = "<gray>No argument specified for <dark_gray>\\<message><gray><br>usage: <dark_gray><usage>";
+    private final String missingMessageArgument = "<dark_gray>[<dark_aqua>hermes<dark_gray>] <gray>No argument specified for <dark_gray>\\<message><gray><br>usage: <dark_gray><usage>";
 
     /**
      * MiniMessage feedback for command /{@value PrivateMessageCommand#commandName} recipient could not be found.
@@ -48,7 +48,7 @@ public class PrivateMessageCommandFeedback extends CommandFeedbackItem {
         return deserializeWithUsageTag(recipientUnavailableMessage, usagePlaceholderStatic);
     }
 
-    private final String recipientUnavailableMessage = "<gray>The specified recipient is not available.";
+    private final String recipientUnavailableMessage = "<dark_gray>[<dark_aqua>hermes<dark_gray>] <gray>The specified recipient is not available.";
 
     /**
      * MiniMessage feedback for command /{@value PrivateMessageCommand#commandName} missing permission node {@value PermissionConstants#commandPermissionPrivateMessageReply}.
@@ -57,6 +57,6 @@ public class PrivateMessageCommandFeedback extends CommandFeedbackItem {
         return deserializeWithUsageTag(missingPermission, usagePlaceholderStatic);
     }
 
-    private final String missingPermission = MessageFormat.format("<red> You are missing the permission node \"{0}\"",
+    private final String missingPermission = MessageFormat.format("<dark_gray>[<dark_aqua>hermes<dark_gray>] <red> You are missing the permission node \"{0}\"",
             PermissionConstants.commandPermissionPrivateMessageInitiate);
 }

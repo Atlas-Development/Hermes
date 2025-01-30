@@ -31,7 +31,7 @@ public class PrivateMessageReplyCommandFeedback extends CommandFeedbackItem {
         return deserializeWithUsageTag(missingMessageArgument, usagePlaceholderStatic);
     }
 
-    private String missingMessageArgument = "<gray>No argument specified for <dark_gray>\\<message><gray><br>usage: <dark_gray><usage>";
+    private String missingMessageArgument = "<dark_gray>[<dark_aqua>hermes<dark_gray>] <gray>No argument specified for <dark_gray>\\<message><gray><br>usage: <dark_gray><usage>";
 
     /**
      * MiniMessage feedback for command /{@value PrivateMessageReplyCommand#commandName} no reply partner.
@@ -40,7 +40,7 @@ public class PrivateMessageReplyCommandFeedback extends CommandFeedbackItem {
         return deserializeWithUsageTag(noPartner, usagePlaceholderStatic);
     }
 
-    private String noPartner = "<gray>there is nobody to reply to.";
+    private String noPartner = "<dark_gray>[<dark_aqua>hermes<dark_gray>] <gray>there is nobody to reply to.";
 
     /**
      * MiniMessage feedback for command /{@value PrivateMessageReplyCommand#commandName} recipient unavailable.<br/>
@@ -50,7 +50,7 @@ public class PrivateMessageReplyCommandFeedback extends CommandFeedbackItem {
         return deserializeWithUsageTag(recipientUnavailableMessage, usagePlaceholderStatic);
     }
 
-    private String recipientUnavailableMessage = "<gray>The recipient is not available.";
+    private String recipientUnavailableMessage = "<dark_gray>[<dark_aqua>hermes<dark_gray>] <gray>The recipient is not available.";
 
     /**
      * MiniMessage feedback for command /{@value PrivateMessageReplyCommand#commandName} recipient player offline.
@@ -59,7 +59,7 @@ public class PrivateMessageReplyCommandFeedback extends CommandFeedbackItem {
         return deserializeWithUsageTag(recipientPlayerOfflineMessage, usagePlaceholderStatic);
     }
 
-    private String recipientPlayerOfflineMessage = "<gray>The receiving player is offline.";
+    private String recipientPlayerOfflineMessage = "<dark_gray>[<dark_aqua>hermes<dark_gray>] <gray>The receiving player is offline.";
 
     /**
      * MiniMessage feedback for command /{@value PrivateMessageReplyCommand#commandName} missing permission node {@value PermissionConstants#commandPermissionPrivateMessageReply}.
@@ -68,6 +68,6 @@ public class PrivateMessageReplyCommandFeedback extends CommandFeedbackItem {
         return deserializeWithUsageTag(missingPermission, usagePlaceholderStatic);
     }
 
-    private String missingPermission = MessageFormat.format("<red> You are missing the permission node \"{0}\"",
+    private String missingPermission = MessageFormat.format("<dark_gray>[<dark_aqua>hermes<dark_gray>] <red> You are missing the permission node \"{0}\"",
             PermissionConstants.commandPermissionPrivateMessageReply);
 }

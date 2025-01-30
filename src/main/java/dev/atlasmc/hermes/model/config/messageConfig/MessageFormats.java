@@ -32,8 +32,8 @@ public class MessageFormats {
             "<" + MiniMessageCustomTagConstants.senderHasLpGroupPrefix + ">,\n" +
             "<" + MiniMessageCustomTagConstants.senderLpPrimaryGroupPrefix + ">,\n" +
             "<" + MiniMessageCustomTagConstants.senderLpGroupsPrefix + ">")
-    private String playerServerGlobalChat = MessageFormat.format("<color:#555555>[<color:#aaaaaa><hover:show_text:''global message sent from server {3}''>g</hover><color:#555555>] [<color:#ffffff><{0}><color:#555555>] <color:#ffffff><{1}>: <{2}>",
-            MiniMessageCustomTagConstants.senderLpPrimaryGroupPrefix,
+    private String playerServerGlobalChat = MessageFormat.format("<dark_gray>[<gray><hover:show_text:''Global message sent from server <{3}>''>g</hover><dark_gray>] <dark_gray>[<{0}><dark_gray>] <white><{1}>: <{2}>",
+            MiniMessageCustomTagConstants.senderLpGroupsPrefix,
             MiniMessageCustomTagConstants.sender,
             MiniMessageCustomTagConstants.message,
             MiniMessageCustomTagConstants.serverName);
@@ -60,10 +60,10 @@ public class MessageFormats {
             "<" + MiniMessageCustomTagConstants.senderHasLpGroupPrefix + ">,\n" +
             "<" + MiniMessageCustomTagConstants.senderLpPrimaryGroupPrefix + ">,\n" +
             "<" + MiniMessageCustomTagConstants.senderLpGroupsPrefix + ">")
-    private String playerServerChat = MessageFormat.format("<color:#555555>[<color:#aaaaaa><hover:show_text:''server name: <{0}>''><{1}></hover><color:#555555>] [<color:#ffffff><{2}><color:#555555>] <color:#ffffff><{3}>: <{4}>",
+    private String playerServerChat = MessageFormat.format("<dark_gray>[<gray><hover:show_text:''Server name: <{0}>''><{1}></hover><dark_gray>] [<{2}><dark_gray>] <white><{3}>: <{4}>",
             MiniMessageCustomTagConstants.serverName,
             MiniMessageCustomTagConstants.serverPrefix,
-            MiniMessageCustomTagConstants.senderLpPrimaryGroupPrefix,
+            MiniMessageCustomTagConstants.senderLpGroupsPrefix,
             MiniMessageCustomTagConstants.sender,
             MiniMessageCustomTagConstants.message);
 
@@ -101,7 +101,7 @@ public class MessageFormats {
             "<" + MiniMessageCustomTagConstants.receiverIsPlayer + ">,\n" +
             "<" + MiniMessageCustomTagConstants.senderIsConsole + ">,\n" +
             "<" + MiniMessageCustomTagConstants.receiverIsConsole + ">")
-    private String privateMessageSender = MessageFormat.format("<dark_gray>[<gray>msg<dark_gray>] <white>you <gray>-> <{0}:''<dark_gray>[<{1}:''|''><dark_gray>] '':''''><white><{2}>: <{3}>",
+    private String privateMessageSender = MessageFormat.format("<dark_gray>[<color:#40a0a0>msg<dark_gray>] <gray>you → <{0}:''<dark_gray>[<{1}><dark_gray>]'':''''> <white><{2}>: <{3}>",
             MiniMessageCustomTagConstants.receiverHasLpGroupPrefix,
             MiniMessageCustomTagConstants.receiverLpGroupsPrefix,
             MiniMessageCustomTagConstants.receiver,
@@ -141,7 +141,7 @@ public class MessageFormats {
             "<" + MiniMessageCustomTagConstants.receiverIsPlayer + ">,\n" +
             "<" + MiniMessageCustomTagConstants.senderIsConsole + ">,\n" +
             "<" + MiniMessageCustomTagConstants.receiverIsConsole + ">")
-    private String privateMessageReceiver = MessageFormat.format("<dark_gray>[<gray>msg<dark_gray>] <{0}:''<dark_gray>[<{1}:''|''><dark_gray>] '':''''><white><{2}> <gray>-> <white>you: <{3}>",
+    private String privateMessageReceiver = MessageFormat.format("<dark_gray>[<color:#40a0a0>msg<dark_gray>] <{0}:''[<{1}><dark_gray>]'':''''> <white><{2}> <gray>→ you<white>: <{3}>",
             MiniMessageCustomTagConstants.senderHasLpGroupPrefix,
             MiniMessageCustomTagConstants.senderLpGroupsPrefix,
             MiniMessageCustomTagConstants.sender,
@@ -181,11 +181,11 @@ public class MessageFormats {
             "<" + MiniMessageCustomTagConstants.receiverIsPlayer + ">,\n" +
             "<" + MiniMessageCustomTagConstants.senderIsConsole + ">,\n" +
             "<" + MiniMessageCustomTagConstants.receiverIsConsole + ">")
-    private String privateMessageThirdParty = MessageFormat.format("<dark_gray>[<gray>msg<dark_gray>] <{0}:''[<gray><{1}><dark_gray>]'' :''''><white><{4}> <gray>-> <{2}:''<dark_gray>[<gray><{3}><dark_gray>]'':''''> <white><{5}>: <{6}>",
+    private String privateMessageThirdParty = MessageFormat.format("<dark_gray>[<color:#40a0a0>msg<dark_gray>] <{0}:''[<{1}><dark_gray>]'':''''> <white><{4}> <gray>→ <{2}:''<dark_gray>[<{3}><dark_gray>]'':''''> <white><{5}>: <{6}>",
             MiniMessageCustomTagConstants.senderHasLpGroupPrefix,
-            MiniMessageCustomTagConstants.senderLpPrimaryGroupPrefix,
+            MiniMessageCustomTagConstants.senderLpGroupsPrefix,
             MiniMessageCustomTagConstants.receiverHasLpGroupPrefix,
-            MiniMessageCustomTagConstants.receiverLpPrimaryGroupPrefix,
+            MiniMessageCustomTagConstants.receiverLpGroupsPrefix,
             MiniMessageCustomTagConstants.sender,
             MiniMessageCustomTagConstants.receiver,
             MiniMessageCustomTagConstants.message);

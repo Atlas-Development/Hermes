@@ -220,5 +220,7 @@ public class HermesConfig {
     public void setDefaults() {
         serverPrefixes.put("lobby", String.format("<hover:show_text:'<%s>'><gray>lb</hover>", MiniMessageCustomTagConstants.serverName));
         serverPrefixes.put("dev", String.format("<hover:show_text:'<%s>'><gray>d</hover>", MiniMessageCustomTagConstants.serverName));
+        serverPrefixes.put("survival", String.format("<hover:show_text:'<%s>'><gray>sv</hover>", MiniMessageCustomTagConstants.serverName));
+        serverPrefixes.put("creative", String.format("<hover:show_text:'<%s>'><gray>c</hover>", MiniMessageCustomTagConstants.serverName));
     }
 }

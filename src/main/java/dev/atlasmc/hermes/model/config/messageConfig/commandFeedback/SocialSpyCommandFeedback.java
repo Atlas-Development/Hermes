@@ -30,7 +30,7 @@ public class SocialSpyCommandFeedback extends CommandFeedbackItem {
         return deserializeWithUsageTag(missingStateArgument, usagePlaceholderStatic);
     }
 
-    private String missingStateArgument = "<gray>No argument specified for <dark_gray>\\<state><gray><br>usage: <dark_gray><usage>";
+    private String missingStateArgument = "<dark_gray>[<dark_aqua>hermes<dark_gray>] <gray>No argument specified for <dark_gray>\\<state><gray><br>usage: <dark_gray><usage>";
 
     /**
      * MiniMessage feedback for command /{@value SocialSpyCommand#commandName} invalid parameter {@value SocialSpyCommand#stateArgumentName}.
@@ -39,7 +39,7 @@ public class SocialSpyCommandFeedback extends CommandFeedbackItem {
         return deserializeWithUsageTag(invalidStateArgument, usagePlaceholderStatic);
     }
 
-    private String invalidStateArgument = "<gray>Invalid argument specified for <dark_gray>\\<state><gray><br>The state must be either \"true\" or \"false\"<br>usage: <dark_gray><usage>";
+    private String invalidStateArgument = "<dark_gray>[<dark_aqua>hermes<dark_gray>] <gray>Invalid argument specified for <dark_gray>\\<state><gray><br>The state must be either \"true\" or \"false\"<br>usage: <dark_gray><usage>";
 
     /**
      * MiniMessage feedback for command /{@value SocialSpyCommand#commandName} socialSpy activated.
@@ -48,7 +48,7 @@ public class SocialSpyCommandFeedback extends CommandFeedbackItem {
         return deserializeWithUsageTag(activatedMessage, usagePlaceholderStatic);
     }
 
-    private String activatedMessage = "<gray>Activated SocialSpy.";
+    private String activatedMessage = "<dark_gray>[<dark_aqua>hermes<dark_gray>] <gray>Activated SocialSpy.";
 
     /**
      * MiniMessage feedback for command /{@value SocialSpyCommand#commandName} socialSpy activated.
@@ -57,7 +57,7 @@ public class SocialSpyCommandFeedback extends CommandFeedbackItem {
         return deserializeWithUsageTag(deactivatedMessage, usagePlaceholderStatic);
     }
 
-    private String deactivatedMessage = "<gray>Deactivated SocialSpy.";
+    private String deactivatedMessage = "<dark_gray>[<dark_aqua>hermes<dark_gray>] <gray>Deactivated SocialSpy.";
 
     /**
      * MiniMessage feedback for command /{@value SocialSpyCommand#commandName} missing permission node {@value PermissionConstants#commandPermissionPrivateMessageReply}.
@@ -66,6 +66,6 @@ public class SocialSpyCommandFeedback extends CommandFeedbackItem {
         return deserializeWithUsageTag(missingPermission, usagePlaceholderStatic);
     }
 
-    private String missingPermission = MessageFormat.format("<red> You are missing the permission node \"{0}\"",
+    private String missingPermission = MessageFormat.format("<dark_gray>[<dark_aqua>hermes<dark_gray>] <red> You are missing the permission node \"{0}\"",
             PermissionConstants.commandPermissionSocialSpy);
 }
