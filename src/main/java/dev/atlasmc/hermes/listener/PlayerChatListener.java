@@ -65,11 +65,23 @@ public class PlayerChatListener {
         //cancel player message
         event.setResult(PlayerChatEvent.ChatResult.denied());
 
-        //check if message is a command
+        //stop if the message is a command
         if (message.charAt(0) == '/')
             return;
-        else if (message.startsWith("./"))
-            message = message.substring(1);
+        int messageStart = 0;
+        final boolean toggleGlobalChat;
+        //check for characters to be cut off
+        if(message.charAt(messageStart) == '!') {
+            toggleGlobalChat = true;
+            messageStart++;
+        } else {
+            toggleGlobalChat = false;
+        }
+        if(message.length() > messageStart && message.charAt(messageStart) == '.') {
+            messageStart += message.charAt(messageStart + 1) == '/' ||
+                    message.charAt(messageStart + 1) == '!' ? 1 : 0;
+        }
+        message = message.substring(messageStart);
 
         final PlayerConfiguration playerConfiguration = playerConfigurations.get(player);
         if (playerConfiguration == null) {
@@ -81,8 +93,8 @@ public class PlayerChatListener {
         final boolean useGlobalChat;
         final MiscellaneousMessages miscellaneousMessages = configuration.getMessageConfig().getMiscellaneousMessages();
 
-        if (message.charAt(0) == '!') {
-            if (message.length() == 1) {
+        if (toggleGlobalChat) {
+            if (message.isEmpty()) {
                 final MiniMessage miniMessage = MiniMessage.miniMessage();
                 //toggle between global and server chat
                 if (playerConfiguration.isServerGlobalChannelSender()) {
@@ -94,9 +106,6 @@ public class PlayerChatListener {
                 }
                 return;
             }
-            //remove '!' from message
-            message = message.substring(1);
-
             //write in global chat if the player is currently in local chat and vice versa
             useGlobalChat = !playerConfiguration.isServerGlobalChannelSender();
         } else {
